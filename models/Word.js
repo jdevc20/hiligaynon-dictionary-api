@@ -10,7 +10,7 @@ const wordSchema = new mongoose.Schema({
     definitions: [{
         language: {
             type: String,
-            enum: ['English', 'Hiligaynon']
+            enum: ['English', 'Hiligaynon', 'Kinaray-a']
         },
         definition: {
             type: String,
@@ -34,7 +34,7 @@ const wordSchema = new mongoose.Schema({
     }],
     wordType: {
         type: String,
-        enum: ['noun', 'verb', 'adjective', 'adverb', 'pronoun', 'preposition', 'conjunction', 'interjection']
+        enum: ['noun', 'verb', 'adjective', 'adverb', 'pronoun', 'preposition', 'conjunction', 'interjection', 'none']
     },
     furtherDetails: String,
     etymology: {
