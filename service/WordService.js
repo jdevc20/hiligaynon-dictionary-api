@@ -46,14 +46,23 @@ class WordService {
             throw error;
         }
     }
+    //async getAllWords() {
+    //    try {
+    //        const words = await Word.find();
+    //        return words;
+    //    } catch (error) {
+    //        throw error;
+    //    }
+    //}
     async getAllWords() {
         try {
-            const words = await Word.find();
+            const words = await Word.find({}, 'word wordType'); // Specify the fields to include ('word', 'wordType')
             return words;
         } catch (error) {
             throw error;
         }
     }
+
 }
 
 module.exports = WordService;
