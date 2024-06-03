@@ -62,6 +62,14 @@ class WordService {
             throw error;
         }
     }
+    async getWordsByWord(word) {
+        try {
+            const words = await Word.find({ word });
+            return words;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }
 

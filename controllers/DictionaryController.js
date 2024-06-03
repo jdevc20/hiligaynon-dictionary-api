@@ -65,6 +65,19 @@ class DictionaryController {
             res.status(500).json({ error: error.message });
         }
     }
+
+    async getWordsByWord(req, res) {
+        try {
+            const word = req.params.word;
+            const words = await wordService.getWordsByWord(word);
+            if (words.length === 0) {
+                return res.status(404).json({ message: 'No entries found for the given word' });
+            }
+            res.status(200).json(words);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 
 module.exports = DictionaryController;

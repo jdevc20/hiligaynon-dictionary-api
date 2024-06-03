@@ -11,5 +11,6 @@ router.put('/words/:id', dictionaryController.updateWord);
 router.delete('/words/:id', dictionaryController.deleteWord);
 router.get('/words', dictionaryController.getAllWords); // Route to get all words
 router.get('/search', dictionaryController.searchWords); // Route to search words
+router.get('/words/:word', dictionaryController.getWordsByWord); // Route to get words by word string
 
 module.exports = router;
