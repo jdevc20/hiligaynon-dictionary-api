@@ -62,14 +62,15 @@ class WordService {
             throw error;
         }
     }
-    async getWordsByWord(word) {
+    async getWordsByWord(_word) {
         try {
-            const words = await Word.find({ word });
+            const words = await Word.find({ $text: { $search: _word, $diacriticSensitive: false, $caseSensitive: false } });
             return words;
         } catch (error) {
             throw error;
         }
     }
+
 
 }
 

@@ -47,5 +47,7 @@ const wordSchema = new mongoose.Schema({
     derivedWords: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Word' }] // Reference to derived words
 });
 
+wordSchema.index({ word: 'text' });
+
 const Word = mongoose.model('Word', wordSchema);
 module.exports = { Word };

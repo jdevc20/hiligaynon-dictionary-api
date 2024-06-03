@@ -68,8 +68,8 @@ class DictionaryController {
 
     async getWordsByWord(req, res) {
         try {
-            const word = req.params.word;
-            const words = await wordService.getWordsByWord(word);
+            let word = req.params.word; // Convert to lowercase and remove leading and trailing spaces
+            const words = await wordService.getWordsByWord(word.toLowerCase().trim());
             if (words.length === 0) {
                 return res.status(404).json({ message: 'No entries found for the given word' });
             }
@@ -78,6 +78,7 @@ class DictionaryController {
             res.status(500).json({ error: error.message });
         }
     }
+
 }
 
 module.exports = DictionaryController;
