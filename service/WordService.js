@@ -54,14 +54,20 @@ class WordService {
     //        throw error;
     //    }
     //}
-    async getAllWords() {
+    async getAllWords(letter) {
         try {
-            const words = await Word.find({}, 'word wordType'); // Specify the fields to include ('word', 'wordType')
+            const query = letter ? { word: new RegExp(`^${letter}`, 'i') } : {};
+            console.log(`Constructed query: ${JSON.stringify(query)}`); // Debugging line
+            const words = await Word.find(query, 'word wordType');
+            console.log(`Retrieved words: ${JSON.stringify(words)}`); // Debugging line
             return words;
         } catch (error) {
+            console.error(`Error in getAllWords: ${error.message}`); // Debugging line
             throw error;
         }
     }
+
+
     async getWordsByWord(_word) {
         try {
             const words = await Word.find({ $text: { $search: _word, $diacriticSensitive: false, $caseSensitive: false } });

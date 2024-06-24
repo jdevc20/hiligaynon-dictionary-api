@@ -59,12 +59,16 @@ class DictionaryController {
 
     async getAllWords(req, res) {
         try {
-            const words = await wordService.getAllWords();
+            const letter = req.query.letter;
+            console.log(`Query parameter letter: ${letter}`); // Debugging line
+            const words = await wordService.getAllWords(letter);
             res.status(200).json(words);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
+
+
 
     async getWordsByWord(req, res) {
         try {
