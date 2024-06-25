@@ -48,7 +48,7 @@ class DictionaryController {
 
     async searchWords(req, res) {
         try {
-           const query = req.query.query; // Extract query parameter
+          const query = req.query.query; // Extract query parameter
             if (!query || query.length < 2) {
                 return res.status(400).json({ error: 'Query parameter is required and must be at least 2 characters long' });
             }
