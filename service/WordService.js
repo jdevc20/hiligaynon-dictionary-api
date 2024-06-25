@@ -1,4 +1,4 @@
-const { Word } = require('../models/Word'); // Assuming your model file is named wordModel.js
+const { Word } = require('../models/Word'); // Adjust the path to your Word model
 
 class WordService {
     async createWord(wordData) {
@@ -39,21 +39,21 @@ class WordService {
 
     async searchWords(query) {
         try {
-            // Implement your search logic here, based on your requirements
-            const words = await Word.find(query);
-            return words;
+            const normalizedQuery = WordService.normalizeString(query);
+            const regex = new RegExp(normalizedQuery, 'i'); // Create case-insensitive regex
+
+            // Perform search using regex
+            const results = await Word.find({ word: { $regex: regex } });
+            return results;
         } catch (error) {
-            throw error;
+            throw new Error(`Error while searching words: ${error.message}`);
         }
     }
-    //async getAllWords() {
-    //    try {
-    //        const words = await Word.find();
-    //        return words;
-    //    } catch (error) {
-    //        throw error;
-    //    }
-    //}
+
+    static normalizeString(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove accents
+    }
+
     async getAllWords(letter) {
         try {
             const query = letter ? { word: new RegExp(`^${letter}`, 'i') } : {};
@@ -67,7 +67,6 @@ class WordService {
         }
     }
 
-
     async getWordsByWord(_word) {
         try {
             const words = await Word.find({ $text: { $search: _word, $diacriticSensitive: false, $caseSensitive: false } });
@@ -76,19 +75,6 @@ class WordService {
             throw error;
         }
     }
-
-    async searchWords(query) {
-        try {
-            // Perform search based on the 'word' field using text index
-            const results = await Word.find({ $text: { $search: query } });
-
-            return results;
-        } catch (error) {
-            throw new Error(`Error while searching words: ${error.message}`);
-        }
-    }
-
-
 }
 
 module.exports = WordService;
