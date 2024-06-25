@@ -39,11 +39,19 @@ class WordService {
 
     async searchWords(query) {
         try {
+            if (query.length < 2) {
+                throw new Error('Query must be at least 2 characters long');
+            }
+
             const normalizedQuery = WordService.normalizeString(query);
+            console.log(`Normalized query: ${normalizedQuery}`); // Debugging line
             const regex = new RegExp(normalizedQuery, 'i'); // Create case-insensitive regex
+            console.log(`Regex: ${regex}`); // Debugging line
 
             // Perform search using regex
             const results = await Word.find({ word: { $regex: regex } });
+            console.log(`Results: ${JSON.stringify(results)}`); // Debugging line
+
             return results;
         } catch (error) {
             throw new Error(`Error while searching words: ${error.message}`);
