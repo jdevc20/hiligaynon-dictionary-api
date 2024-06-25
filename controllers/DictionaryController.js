@@ -49,8 +49,13 @@ class DictionaryController {
 
     async searchWords(req, res) {
         try {
-            const query = req.query;
-            const words = await wordService.searchWords(query);
+            const query = req.query.query; // Extract query parameter
+            if (!query) {
+                return res.status(400).json({ error: 'Query parameter is required' });
+            }
+            // Convert query to string to ensure it's the correct type
+            const queryString = String(query);
+            const words = await wordService.searchWords(queryString);
             res.status(200).json(words);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -58,31 +63,31 @@ class DictionaryController {
     }
 
     async getAllWords(req, res) {
-        try {
-            const letter = req.query.letter;
-            console.log(`Query parameter letter: ${letter}`); // Debugging line
-            const words = await wordService.getAllWords(letter);
-            res.status(200).json(words);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
+            try {
+                const letter = req.query.letter;
+                console.log(`Query parameter letter: ${letter}`); // Debugging line
+                const words = await wordService.getAllWords(letter);
+                res.status(200).json(words);
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            }
         }
-    }
 
 
 
     async getWordsByWord(req, res) {
-        try {
-            let word = req.params.word; // Convert to lowercase and remove leading and trailing spaces
-            const words = await wordService.getWordsByWord(word.toLowerCase().trim());
-            if (words.length === 0) {
-                return res.status(404).json({ message: 'No entries found for the given word' });
+            try {
+                let word = req.params.word; // Convert to lowercase and remove leading and trailing spaces
+                const words = await wordService.getWordsByWord(word.toLowerCase().trim());
+                if (words.length === 0) {
+                    return res.status(404).json({ message: 'No entries found for the given word' });
+                }
+                res.status(200).json(words);
+            } catch (error) {
+                res.status(500).json({ error: error.message });
             }
-            res.status(200).json(words);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
         }
-    }
 
-}
+    }
 
 module.exports = DictionaryController;

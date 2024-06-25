@@ -77,6 +77,17 @@ class WordService {
         }
     }
 
+    async searchWords(query) {
+        try {
+            // Perform search based on the 'word' field using text index
+            const results = await Word.find({ $text: { $search: query } });
+
+            return results;
+        } catch (error) {
+            throw new Error(`Error while searching words: ${error.message}`);
+        }
+    }
+
 
 }
 
