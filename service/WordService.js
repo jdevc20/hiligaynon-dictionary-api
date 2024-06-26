@@ -7,6 +7,7 @@ class WordService {
             const savedWord = await newWord.save();
             return savedWord;
         } catch (error) {
+            console.error(`Error in createWord: ${error.message}`);
             throw error;
         }
     }
@@ -14,8 +15,12 @@ class WordService {
     async getWordById(wordId) {
         try {
             const word = await Word.findById(wordId);
+            if (!word) {
+                throw new Error('Word not found');
+            }
             return word;
         } catch (error) {
+            console.error(`Error in getWordById: ${error.message}`);
             throw error;
         }
     }
@@ -23,16 +28,24 @@ class WordService {
     async updateWord(wordId, wordData) {
         try {
             const updatedWord = await Word.findByIdAndUpdate(wordId, wordData, { new: true });
+            if (!updatedWord) {
+                throw new Error('Word not found');
+            }
             return updatedWord;
         } catch (error) {
+            console.error(`Error in updateWord: ${error.message}`);
             throw error;
         }
     }
 
     async deleteWord(wordId) {
         try {
-            await Word.findByIdAndDelete(wordId);
+            const deletedWord = await Word.findByIdAndDelete(wordId);
+            if (!deletedWord) {
+                throw new Error('Word not found');
+            }
         } catch (error) {
+            console.error(`Error in deleteWord: ${error.message}`);
             throw error;
         }
     }
@@ -54,6 +67,7 @@ class WordService {
 
             return results;
         } catch (error) {
+            console.error(`Error in searchWords: ${error.message}`);
             throw new Error(`Error while searching words: ${error.message}`);
         }
     }
@@ -70,7 +84,7 @@ class WordService {
             console.log(`Retrieved words: ${JSON.stringify(words)}`); // Debugging line
             return words;
         } catch (error) {
-            console.error(`Error in getAllWords: ${error.message}`); // Debugging line
+            console.error(`Error in getAllWords: ${error.message}`);
             throw error;
         }
     }
@@ -80,6 +94,7 @@ class WordService {
             const words = await Word.find({ $text: { $search: _word, $diacriticSensitive: false, $caseSensitive: false } });
             return words;
         } catch (error) {
+            console.error(`Error in getWordsByWord: ${error.message}`);
             throw error;
         }
     }

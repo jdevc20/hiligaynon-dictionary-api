@@ -30,6 +30,9 @@ class DictionaryController {
             const wordId = req.params.id;
             const wordData = req.body;
             const updatedWord = await wordService.updateWord(wordId, wordData);
+            if (!updatedWord) {
+                return res.status(404).json({ message: 'Word not found' });
+            }
             res.status(200).json(updatedWord);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -39,7 +42,10 @@ class DictionaryController {
     async deleteWord(req, res) {
         try {
             const wordId = req.params.id;
-            await wordService.deleteWord(wordId);
+            const deletedWord = await wordService.deleteWord(wordId);
+            if (!deletedWord) {
+                return res.status(404).json({ message: 'Word not found' });
+            }
             res.status(204).end();
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -48,7 +54,7 @@ class DictionaryController {
 
     async searchWords(req, res) {
         try {
-          const query = req.query.query; // Extract query parameter
+            const query = req.query.query; // Extract query parameter
             if (!query || query.length < 2) {
                 return res.status(400).json({ error: 'Query parameter is required and must be at least 2 characters long' });
             }
@@ -62,7 +68,6 @@ class DictionaryController {
     async getAllWords(req, res) {
         try {
             const letter = req.query.letter;
-            console.log(`Query parameter letter: ${letter}`); // Debugging line
             const words = await wordService.getAllWords(letter);
             res.status(200).json({ data: words }); // Response wrapped in { data: [...] }
         } catch (error) {
@@ -72,8 +77,8 @@ class DictionaryController {
 
     async getWordsByWord(req, res) {
         try {
-            let word = req.params.word; // Convert to lowercase and remove leading and trailing spaces
-            const words = await wordService.getWordsByWord(word.toLowerCase().trim());
+            const word = req.params.word.trim().toLowerCase(); // Convert to lowercase and remove leading and trailing spaces
+            const words = await wordService.getWordsByWord(word);
             if (words.length === 0) {
                 return res.status(404).json({ message: 'No entries found for the given word' });
             }

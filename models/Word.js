@@ -7,16 +7,10 @@ const wordSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    definitions: [{
-        language: {
-            type: String,
-            enum: ['English', 'Hiligaynon', 'Kinaray-a']
-        },
-        definition: {
-            type: String,
-            required: true
-        }
-    }],
+    definition: {
+        type: String,
+        required: true
+    },
     pronunciation: String,
     isActive: {
         type: Boolean,
@@ -44,7 +38,11 @@ const wordSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    derivedWords: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Word' }] // Reference to derived words
+    derivedWords: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Word' }], // Reference to derived words
+    isChecked: {
+        type: Boolean,
+        default: false
+    }
 });
 
 wordSchema.index({ word: 'text' });
