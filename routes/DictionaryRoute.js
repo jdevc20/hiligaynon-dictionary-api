@@ -39,7 +39,7 @@ router.delete('/words/:id', dictionaryController.deleteWord);
 
 /**
  * @route GET /words
- * @description Get all words, optionally filtered by the starting letter
+ * @description Retrieve all words, optionally filtered by the starting letter
  * @access Public
  * @query {String} letter - The starting letter to filter words (optional)
  */
@@ -54,11 +54,11 @@ router.get('/words', dictionaryController.getAllWords);
 router.get('/words/search', dictionaryController.searchWords);
 
 /**
- * @route GET /words/by-word/:word
+ * @route GET /words/by-word
  * @description Get word entries that match a given word string
  * @access Public
- * @param {String} word - The word string to search for
+ * @query {String} word - The word string to search for
  */
-router.get('/words/by-word/:word', dictionaryController.getWordsByWord);
+router.get('/words/by-word', dictionaryController.getWordsByWord);
 
 module.exports = router;

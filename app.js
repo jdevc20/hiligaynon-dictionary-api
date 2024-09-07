@@ -35,7 +35,7 @@ app.use(cors());
 
 app.use('/', routes);
 //Dictionary
-app.use('/dictionary', dictionaryRoutes)
+app.use('/api', dictionaryRoutes)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
