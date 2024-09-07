@@ -58,6 +58,7 @@ class DictionaryController {
             if (!query || query.length < 2) {
                 return res.status(400).json({ error: 'Query parameter is required and must be at least 2 characters long' });
             }
+            // Search across word and spelling fields
             const words = await wordService.searchWords(query);
             res.status(200).json({ data: words }); // Response wrapped in { data: [...] }
         } catch (error) {

@@ -1,4 +1,4 @@
-const { Word } = require('../models/Word'); // Adjust the path to your Word model
+const { Word } = require('../models/Word'); 
 
 class WordService {
     async createWord(wordData) {
@@ -14,7 +14,9 @@ class WordService {
 
     async getWordById(wordId) {
         try {
-            const word = await Word.findById(wordId);
+            const word = await Word.findById(wordId)
+                .populate('derivedWords._id') // Populate derived words
+                .populate('relatedWords'); // Populate related words
             if (!word) {
                 throw new Error('Word not found');
             }
@@ -27,7 +29,9 @@ class WordService {
 
     async updateWord(wordId, wordData) {
         try {
-            const updatedWord = await Word.findByIdAndUpdate(wordId, wordData, { new: true });
+            const updatedWord = await Word.findByIdAndUpdate(wordId, wordData, { new: true })
+                .populate('derivedWords._id') // Populate updated derived words
+                .populate('relatedWords'); // Populate updated related words
             if (!updatedWord) {
                 throw new Error('Word not found');
             }
@@ -62,7 +66,12 @@ class WordService {
             console.log(`Regex: ${regex}`); // Debugging line
 
             // Perform search using regex
-            const results = await Word.find({ word: { $regex: regex } });
+            const results = await Word.find({
+                $or: [
+                    { word: { $regex: regex } },
+                    { spelling: { $regex: regex } } // Search in spelling field as well
+                ]
+            });
             console.log(`Results: ${JSON.stringify(results)}`); // Debugging line
 
             return results;
@@ -91,7 +100,9 @@ class WordService {
 
     async getWordsByWord(_word) {
         try {
-            const words = await Word.find({ $text: { $search: _word, $diacriticSensitive: false, $caseSensitive: false } });
+            const words = await Word.find({
+                $text: { $search: _word, $diacriticSensitive: false, $caseSensitive: false }
+            });
             return words;
         } catch (error) {
             console.error(`Error in getWordsByWord: ${error.message}`);

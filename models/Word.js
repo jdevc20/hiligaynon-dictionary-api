@@ -7,6 +7,10 @@ const wordSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    // New spelling field to handle multiple spellings
+    spelling: [{
+        type: String
+    }],
     definition: {
         type: String,
         required: true
@@ -30,15 +34,20 @@ const wordSchema = new mongoose.Schema({
         type: String,
         enum: ['noun', 'verb', 'adjective', 'adverb', 'pronoun', 'preposition', 'conjunction', 'interjection', 'none']
     },
-    furtherDetails: String,
+    // Renamed furtherDetails to details
+    details: String,
     etymology: {
         type: String
     },
-    isRootWord: {
-        type: Boolean,
-        default: true
-    },
-    derivedWords: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Word' }], // Reference to derived words
+    // Updated derivedWords structure
+    derivedWords: [{
+        _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Word' },
+        word: { type: String, required: true },
+        definition: { type: String, required: true },
+        usage_example: { type: String }
+    }],
+    // Related words reference
+    relatedWords: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Word' }],
     isChecked: {
         type: Boolean,
         default: false

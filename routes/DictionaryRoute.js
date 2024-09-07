@@ -4,13 +4,61 @@ const DictionaryController = require('../controllers/DictionaryController');
 
 const dictionaryController = new DictionaryController();
 
-// Routes
+/**
+ * @route POST /words
+ * @description Create a new word entry
+ * @access Public
+ * @body {Object} wordData - Data for the new word entry
+ */
 router.post('/words', dictionaryController.createWord);
-router.get('/words/by-id/:id', dictionaryController.getWordById); // Route to get word by ID
+
+/**
+ * @route GET /words/:id
+ * @description Get a word entry by its ID
+ * @access Public
+ * @param {String} id - The ID of the word to retrieve
+ */
+router.get('/words/:id', dictionaryController.getWordById);
+
+/**
+ * @route PUT /words/:id
+ * @description Update a word entry by its ID
+ * @access Public
+ * @param {String} id - The ID of the word to update
+ * @body {Object} wordData - Updated data for the word entry
+ */
 router.put('/words/:id', dictionaryController.updateWord);
+
+/**
+ * @route DELETE /words/:id
+ * @description Delete a word entry by its ID
+ * @access Public
+ * @param {String} id - The ID of the word to delete
+ */
 router.delete('/words/:id', dictionaryController.deleteWord);
-router.get('/words', dictionaryController.getAllWords); // Route to get all words
-router.get('/search', dictionaryController.searchWords); // Route to search words
-router.get('/words/by-word/:word', dictionaryController.getWordsByWord); // Route to get words by word string
+
+/**
+ * @route GET /words
+ * @description Get all words, optionally filtered by the starting letter
+ * @access Public
+ * @query {String} letter - The starting letter to filter words (optional)
+ */
+router.get('/words', dictionaryController.getAllWords);
+
+/**
+ * @route GET /words/search
+ * @description Search for words based on a query
+ * @access Public
+ * @query {String} query - The search query to find matching words
+ */
+router.get('/words/search', dictionaryController.searchWords);
+
+/**
+ * @route GET /words/by-word/:word
+ * @description Get word entries that match a given word string
+ * @access Public
+ * @param {String} word - The word string to search for
+ */
+router.get('/words/by-word/:word', dictionaryController.getWordsByWord);
 
 module.exports = router;
